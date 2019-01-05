@@ -50,7 +50,7 @@ $(document).ready(function () {
                 content += '<p class="joke">' + (i + 1) + "." + " " + joke + "</p>";
 
                 console.log("i:" + i);
-                console.log("joke: " + joke);
+                console.log("joke[" + i + "]: " + joke);
             }
             $("#json-obj").html(content);
         };

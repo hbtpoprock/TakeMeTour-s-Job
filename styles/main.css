@@ -55,10 +55,10 @@ body {
 }
 
 .text-input-box {
-    font-size: 1em;
+    width: 6em;
     padding-left: 0.25em;
     padding-right: 0.1em;
-    width: 6em
+    font-size: 1em;
 }
 
 #get-joke-btn:hover, #get-joke-btn:focus, #get-joke-btn:active {
