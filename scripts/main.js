@@ -1,25 +1,36 @@
 /*jshint esversion: 6 */
 
 $(document).ready(function () {
-    let joke;
     let num = 1;
+    let url = '';
 
     function getNumValue() {
-        if ($(".input-box").val()) {
-            num = $(".input-box").val();
+        if ($(".number-input-box").val()) {
+            num = $(".number-input-box").val();
         } else {
             num = 1;
         }
+        console.log("num: " + num);
+    }
+
+    function getUrl() {
+        url = "http://api.icndb.com/jokes/random/";
+
+        if ($('#firstName').val().trim() || $('#lastName').val().trim()) {
+            url += num + '?';
+            url += 'firstName=' + $('#firstName').val().trim();
+            url += '&';
+            url += 'lastName=' + $('#lastName').val().trim();
+        } else {
+            url += num;
+        }
+        console.log("url:" + url);
     }
 
     $("#get-joke-btn").click(function () {
-        let url = "http://api.icndb.com/jokes/random/";
 
         getNumValue();
-        console.log("num: " + num);
-
-        url += num;
-        console.log("url:" + url);
+        getUrl();
 
         req = new XMLHttpRequest();
         req.open("GET", url, true);
@@ -36,12 +47,11 @@ $(document).ready(function () {
             for (i = 0; i < json.value.length; i++) {
                 joke = json.value[i].joke;
 
-                content += '<p class="content">' + (i + 1) + "." + " " + joke + "</p>";
+                content += '<p class="joke">' + (i + 1) + "." + " " + joke + "</p>";
 
                 console.log("i:" + i);
                 console.log("joke: " + joke);
             }
-
             $("#json-obj").html(content);
         };
     });
