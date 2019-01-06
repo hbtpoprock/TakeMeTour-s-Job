@@ -1,20 +1,24 @@
 /*jshint esversion: 6 */
 
 $(document).ready(function () {
-    let num = 1;
-    let url = '';
 
     function getNumValue() {
+        let num = 1;
+
         if ($(".number-input-box").val()) {
             num = $(".number-input-box").val();
-        } else {
-            num = 1;
         }
+
+        console.log('$(".number-input-box").val(): ' + $(".number-input-box").val());
+        console.log('Boolean($(".number-input-box").val()): ' + Boolean($(".number-input-box").val()));
         console.log("num: " + num);
+
+        return num;
     }
 
     function getUrl() {
-        url = "http://api.icndb.com/jokes/random/";
+        let num = getNumValue();
+        let url = "http://api.icndb.com/jokes/random/";
 
         if ($('#firstName').val().trim() || $('#lastName').val().trim()) {
             url += num + '?';
@@ -24,13 +28,14 @@ $(document).ready(function () {
         } else {
             url += num;
         }
+
         console.log("url:" + url);
+        return url;
     }
 
     $("#get-joke-btn").click(function () {
 
-        getNumValue();
-        getUrl();
+        let url = getUrl();
 
         req = new XMLHttpRequest();
         req.open("GET", url, true);
@@ -39,7 +44,7 @@ $(document).ready(function () {
         req.onload = function () {
             let content = "";
 
-            json = JSON.parse(req.responseText);
+            let json = JSON.parse(req.responseText);
 
             console.log("json:" + json);
             console.log("JSON.stringify(json):" + JSON.stringify(json));
@@ -47,11 +52,12 @@ $(document).ready(function () {
             for (i = 0; i < json.value.length; i++) {
                 joke = json.value[i].joke;
 
-                content += '<p class="joke">' + (i + 1) + "." + " " + joke + "</p>";
+                content += '<li class="joke">' + joke + "</li>";
 
                 console.log("i:" + i);
-                console.log("joke[" + i + "]: " + joke);
+                console.log("joke[" + json.value[i].id + "]: " + joke);
             }
+
             $("#json-obj").html(content);
         };
     });
