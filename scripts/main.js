@@ -28,37 +28,57 @@ $(document).ready(function () {
         } else {
             url += num;
         }
-
         console.log("url:" + url);
+
         return url;
     }
 
-    $("#get-joke-btn").click(function () {
+    function iterateObj(obj) {
+        let content = "";
 
+        for (i = 0; i < obj.value.length; i++) {
+            let joke = obj.value[i].joke;
+
+            content += '<li class="joke">' + joke + "</li>";
+
+            console.log("i:" + i);
+            console.log("joke[" + obj.value[i].id + "]: " + joke);
+        }
+        return content;
+    }
+
+    $("#get-joke-btn").click(function () {
         let url = getUrl();
 
         req = new XMLHttpRequest();
         req.open("GET", url, true);
         req.send();
 
-        req.onload = function () {
-            let content = "";
+        console.log('req.status before load: ' + req.status);
 
-            let json = JSON.parse(req.responseText);
+        $("#json-obj").html('<div class="loader"></div>');
+        $(".temp").hide();
+        $(".loader").show();
 
-            console.log("json:" + json);
-            console.log("JSON.stringify(json):" + JSON.stringify(json));
+        req.onreadystatechange = function () {
+            if (req.readyState === 4) {
+                $(".loader").hide();
+                if (req.status === 200) {
+                    console.log('req.status after req sent: ' + req.status);
 
-            for (i = 0; i < json.value.length; i++) {
-                joke = json.value[i].joke;
+                    let json = JSON.parse(req.responseText);
 
-                content += '<li class="joke">' + joke + "</li>";
+                    console.log("json:" + json);
+                    console.log("JSON.stringify(json):" + JSON.stringify(json));
 
-                console.log("i:" + i);
-                console.log("joke[" + json.value[i].id + "]: " + joke);
+                    $("#json-obj").html(iterateObj(json));
+                } else {
+                    console.log('req.status after req sent: ' + req.status);
+                    console.log('req.statusText: ' + req.statusText);
+
+                    $("#json-obj").html('<span class="temp">Oops! Something went wrong.</span>');
+                }
             }
-
-            $("#json-obj").html(content);
         };
     });
 });
